@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LifeKompas</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; background: #2e8b57; overflow: hidden; }
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+      text-align: center;
+      color: white;
+    }
+    .title {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .title span {
+      display: block;
+      background: linear-gradient(to bottom, black 50%, orange 50%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .btn {
+      padding: 0.8rem 1.6rem;
+      margin: 0.5rem;
+      border: none;
+      border-radius: 50px;
+      background: rgba(255,255,255,0.6);
+      color: #000;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .back-btn {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <div id="home">
+      <h1 class="title"><span>Life</span><span>Kompas</span></h1>
+      <button class="btn" onclick="select('hr')">🇭🇷 Hrvatski</button>
+      <button class="btn" onclick="select('de')">🇩🇪 Deutsch</button>
+      <button class="btn" onclick="select('en')">🇬🇧 English</button>
+    </div>
+    <div id="lang" style="display:none;">
+      <h2 id="msg" style="color:white; margin-bottom:1rem;"></h2>
+      <button class="btn back-btn" onclick="back()">← Natrag</button>
+    </div>
+  </div>
+
+  <script>
+    const messages = { hr: '✅ Hrvatski odabran', de: '✅ Deutsch ausgewählt', en: '✅ English selected' };
+    function select(lang) {
+      localStorage.setItem('lang', lang);
+      document.getElementById('msg').textContent = messages[lang];
+      document.getElementById('home').style.display = 'none';
+      document.getElementById('lang').style.display = 'block';
+    }
+    function back() {
+      document.getElementById('home').style.display = 'block';
+      document.getElementById('lang').style.display = 'none';
+    }
+    window.addEventListener('load', () => {
+      const saved = localStorage.getItem('lang');
+      if (saved in messages) select(saved);
+    });
+  </script>
+</body>
+</html>

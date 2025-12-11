@@ -5,8 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LifeKompas</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; background: #2e8b57; overflow: hidden; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      /* Gradijent: odozdo svjetlija zelena → odozgo tamnija */
+      background: linear-gradient(to top, #d0f0c0, #a8e6cf, #61c09a, #2e8b57);
+      color: #000;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      min-height: 100vh;
+    }
     .content {
       display: flex;
       flex-direction: column;
@@ -15,31 +28,43 @@
       min-height: 100vh;
       padding: 1.5rem;
       text-align: center;
-      color: white;
     }
     .title {
       font-size: 4rem;
       font-weight: 900;
       margin-bottom: 2rem;
-      text-align: center;
+      line-height: 1;
     }
     .title span {
       display: block;
       background: linear-gradient(to bottom, black 50%, orange 50%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1rem;
     }
     .btn {
       padding: 0.8rem 1.6rem;
-      margin: 0.5rem;
       border: none;
       border-radius: 50px;
-      background: rgba(255,255,255,0.6);
-      color: #000;
+      font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
+      background: rgba(255, 255, 255, 0.6);
+      color: #000;
+      min-width: 140px;
+    }
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.8);
     }
     .back-btn {
+      margin-top: 1.5rem;
       background: transparent;
       color: white;
       border: 2px solid white;
@@ -48,33 +73,48 @@
 </head>
 <body>
   <div class="content">
-    <div id="home">
-      <h1 class="title"><span>Life</span><span>Kompas</span></h1>
-      <button class="btn" onclick="select('hr')">🇭🇷 Hrvatski</button>
-      <button class="btn" onclick="select('de')">🇩🇪 Deutsch</button>
-      <button class="btn" onclick="select('en')">🇬🇧 English</button>
+    <div id="homeScreen">
+      <h1 class="title">
+        <span>Life</span>
+        <span>Kompas</span>
+      </h1>
+      <div class="buttons">
+        <button class="btn" onclick="selectLang('hr')">🇭🇷 Hrvatski</button>
+        <button class="btn" onclick="selectLang('de')">🇩🇪 Deutsch</button>
+        <button class="btn" onclick="selectLang('en')">🇬🇧 English</button>
+      </div>
     </div>
-    <div id="lang" style="display:none;">
-      <h2 id="msg" style="color:white; margin-bottom:1rem;"></h2>
-      <button class="btn back-btn" onclick="back()">← Natrag</button>
+
+    <div id="langScreen" style="display: none;">
+      <h2 id="langMessage" style="color: white; font-size: 1.8rem; margin-bottom: 1rem;"></h2>
+      <button class="btn back-btn" onclick="goBack()">← Natrag na izbor jezika</button>
     </div>
   </div>
 
   <script>
-    const messages = { hr: '✅ Hrvatski odabran', de: '✅ Deutsch ausgewählt', en: '✅ English selected' };
-    function select(lang) {
-      localStorage.setItem('lang', lang);
-      document.getElementById('msg').textContent = messages[lang];
-      document.getElementById('home').style.display = 'none';
-      document.getElementById('lang').style.display = 'block';
+    const messages = {
+      hr: '✅ Hrvatski odabran',
+      de: '✅ Deutsch ausgewählt',
+      en: '✅ English selected'
+    };
+
+    function selectLang(lang) {
+      localStorage.setItem('selectedLanguage', lang);
+      document.getElementById('homeScreen').style.display = 'none';
+      document.getElementById('langScreen').style.display = 'block';
+      document.getElementById('langMessage').textContent = messages[lang];
     }
-    function back() {
-      document.getElementById('home').style.display = 'block';
-      document.getElementById('lang').style.display = 'none';
+
+    function goBack() {
+      document.getElementById('homeScreen').style.display = 'block';
+      document.getElementById('langScreen').style.display = 'none';
     }
+
     window.addEventListener('load', () => {
-      const saved = localStorage.getItem('lang');
-      if (saved in messages) select(saved);
+      const saved = localStorage.getItem('selectedLanguage');
+      if (saved && messages[saved]) {
+        selectLang(saved);
+      }
     });
   </script>
 </body>
